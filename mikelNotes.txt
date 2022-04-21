@@ -1,3 +1,7 @@
+const SideEntranceAttackerFactory = await ethers.getContractFactory('SideEntranceAttacker', deployer);
+I don't understand why we put deployer here.
+
+
 UNSTOPPABLE:
 
     The contract is checking "assert(poolBalance == balanceBefore);" on the "flashLoan"
@@ -24,3 +28,31 @@ NAIVE RECEIVER:
 
     I think the solution could be simnply writting in the flashLoan:
     require(msg.sender == borrower)
+
+TRUSTER ATTACKER: 
+
+    Examining the pool contract’s flashLoan function we can immediately see that it takes 
+    an argument called "data". Then it executes this thinking that the user will pass a 
+    normal function so the flashloan occurs.
+
+    We can code a new contract that will pass an approve function with the necessary 
+    parameters. After this, we will be able to send all the liquidity from the pool
+    to our address, because the transfer function will be approved.
+
+SIDE ENTRANCE:
+
+    Examining the pool contract’s flashLoan function we can immediately see that the execute()
+    function is called, which we can modify.
+
+    This way, we can use execute() to deposit. Now, the last require will pass and we are able
+    to withdraw and transfer the funds into our account. 
+
+THE REWARDER:
+
+    The snapshot taken to calculate the rewards only takes into account the balances of 
+    a certaing moment: when distributeRewards() is called. We can also take a flash loan 
+    of these tokens.
+
+    We can take a big flashloan, deposit it on the rewards pool, call distributeRewards(), 
+    withdraw the tokens, send to ourselves the rewards obtained thanks to the snapshot 
+    and finally pay back the flashloan.
