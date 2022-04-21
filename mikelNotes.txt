@@ -56,3 +56,8 @@ THE REWARDER:
     We can take a big flashloan, deposit it on the rewards pool, call distributeRewards(), 
     withdraw the tokens, send to ourselves the rewards obtained thanks to the snapshot 
     and finally pay back the flashloan.
+
+SELFIE:
+
+    Using the flashloan we can pass _hasEnoughVotes. This way we queue and execute 
+    drainAllFunds.
