@@ -1,0 +1,14 @@
+UNSTOPPABLE:
+
+The contract is checking "assert(poolBalance == balanceBefore);" on the "flashLoan"
+function. The contract has a function "depositTokens" where they sum the ammount
+that is sent to the pool to the "poolBalance".
+
+Instead of using this function we can send directly tokens with the "transfer"
+funciton. This will brake the functionality of the contract since the assert will
+no longer work since the "poolBalance" is not updated.
+
+Lesson for the programmer: 
+    Dangerous strict equalities: Use of strict equalities with tokens/Ether can 
+    accidentally/maliciously cause unexpected behavior. Consider using >= or <= 
+    instead of == for such variables depending on the contract logic
